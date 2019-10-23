@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dev.mapper.GoodMapper" >
+
+    <insert id="save" parameterType="Goods">
+    insert into goods(goods_id,goods_name,goods_type) values(#{goods_id},#{goods_name},#{goods_type})
+    </insert>
+    
+    <select id="findAll" resultType="Goods">
+    select goods_id,goods_name,goods_type from goods
+    </select>
+    
+    <delete id="deleteAll">
+    delete from goods
+    </delete>
+    
+     <select id="select" resultType="Goods" parameterType="Goods">
+    select goods_id,goods_name,goods_type from goods where goods_id=#{goods_id}
+    </select>
+    
+</mapper>
