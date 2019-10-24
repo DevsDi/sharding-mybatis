@@ -1,4 +1,4 @@
-package com.dev.entity;
+package com.dev.entity.system;
 
 
 /** 

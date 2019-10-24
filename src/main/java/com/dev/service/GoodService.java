@@ -9,8 +9,10 @@
 package com.dev.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.dev.entity.Goods;
+import com.dev.entity.system.BaseRequest.BuilderPage;
 
 /** 
  * @ClassName: GoodService
@@ -28,14 +30,6 @@ public interface GoodService {
 	void save(Goods goods);
 
 	/**
-	 * @Title: findAll
-	 * @Description: 
-	 * @return
-	 * @return List<Goods>
-	 */    
-	List<Goods> findAll();
-
-	/**
 	 * @Title: deleteAll
 	 * @Description: 
 	 * @return void
@@ -50,4 +44,13 @@ public interface GoodService {
 	 * @return List<Goods>
 	 */    
 	List<Goods> select(Goods goods);
+
+	/**
+	 * @Title: findAll
+	 * @Description: 
+	 * @param request
+	 * @return
+	 * @return List<Goods>
+	 */    
+	List<Goods> findAll(BuilderPage<Map<String, Object>> request);
 }

@@ -1,4 +1,4 @@
-package com.dev.config;
+package com.dev.config.algorithm;
 
 import com.dangdang.ddframe.rdb.sharding.api.ShardingValue;
 import com.dangdang.ddframe.rdb.sharding.api.strategy.table.SingleKeyTableShardingAlgorithm;

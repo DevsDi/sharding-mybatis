@@ -19,6 +19,8 @@ import com.dangdang.ddframe.rdb.sharding.api.strategy.database.DatabaseShardingS
 import com.dangdang.ddframe.rdb.sharding.api.strategy.table.TableShardingStrategy;
 import com.dangdang.ddframe.rdb.sharding.keygen.DefaultKeyGenerator;
 import com.dangdang.ddframe.rdb.sharding.keygen.KeyGenerator;
+import com.dev.config.algorithm.DatabaseShardingAlgorithm;
+import com.dev.config.algorithm.TableShardingAlgorithm;
 
 /** 
  * @ClassName: DataSourceConfig

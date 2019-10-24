@@ -9,6 +9,7 @@
 package com.dev.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import com.dev.entity.Goods;
 
@@ -29,12 +30,13 @@ public interface GoodMapper {
 	void save(Goods goods);
 
 	/**
+	 * @param map 
 	 * @Title: findAll
 	 * @Description: 
 	 * @return
 	 * @return List<Goods>
 	 */    
-	List<Goods> findAll();
+	List<Goods> findAll(Map<String, Object> map);
 
 	/**
 	 * @Title: deleteAll

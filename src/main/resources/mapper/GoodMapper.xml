@@ -7,7 +7,7 @@
     </insert>
     
     <select id="findAll" resultType="Goods">
-    select goods_id,goods_name,goods_type from goods
+    select goods_id,goods_name,goods_type from goods order by goods_id desc
     </select>
     
     <delete id="deleteAll">

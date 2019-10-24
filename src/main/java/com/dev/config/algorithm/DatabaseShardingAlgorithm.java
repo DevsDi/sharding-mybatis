@@ -1,7 +1,12 @@
-package com.dev.config;
+package com.dev.config.algorithm;
 import com.dangdang.ddframe.rdb.sharding.api.ShardingValue;
 import com.dangdang.ddframe.rdb.sharding.api.strategy.database.SingleKeyDatabaseShardingAlgorithm;
+import com.dev.config.Database0Config;
+import com.dev.config.Database1Config;
 import com.google.common.collect.Range;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
  
@@ -17,6 +22,7 @@ import java.util.LinkedHashSet;
  * @Date: 2019年10月23日 下午2:47:31
  */
 @Component
+@Slf4j
 public class DatabaseShardingAlgorithm implements SingleKeyDatabaseShardingAlgorithm<Long> {
  
     @Autowired
@@ -27,6 +33,10 @@ public class DatabaseShardingAlgorithm implements SingleKeyDatabaseShardingAlgor
  
     @Override
     public String doEqualSharding(Collection<String> availableTargetNames, ShardingValue<Long> shardingValue) {
+    	log.info("=======doEqualSharding===========");
+    	log.info("======availableTargetNames======="+availableTargetNames);
+    	log.info("======shardingValue======="+shardingValue);
+    	log.info("------------------------------------------------------------------------------------");
         Long value = shardingValue.getValue();
         if (value <= 20L) {
             return database0Config.getDatabaseName();
@@ -37,6 +47,7 @@ public class DatabaseShardingAlgorithm implements SingleKeyDatabaseShardingAlgor
  
     @Override
     public Collection<String> doInSharding(Collection<String> availableTargetNames, ShardingValue<Long> shardingValue) {
+    	log.info("=======doInSharding===========");
         Collection<String> result = new LinkedHashSet<>(availableTargetNames.size());
         for (Long value : shardingValue.getValues()) {
             if (value <= 20L) {
@@ -49,8 +60,8 @@ public class DatabaseShardingAlgorithm implements SingleKeyDatabaseShardingAlgor
     }
  
     @Override
-    public Collection<String> doBetweenSharding(Collection<String> availableTargetNames,
-                                                ShardingValue<Long> shardingValue) {
+    public Collection<String> doBetweenSharding(Collection<String> availableTargetNames,ShardingValue<Long> shardingValue) {
+    	log.info("=======doBetweenSharding===========");
         Collection<String> result = new LinkedHashSet<>(availableTargetNames.size());
         Range<Long> range = shardingValue.getValueRange();
         for (Long value = range.lowerEndpoint(); value <= range.upperEndpoint(); value++) {

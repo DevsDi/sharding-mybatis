@@ -9,11 +9,13 @@
 package com.dev.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dev.entity.Goods;
+import com.dev.entity.system.BaseRequest.BuilderPage;
 import com.dev.mapper.GoodMapper;
 import com.dev.service.GoodService;
 
@@ -42,14 +44,15 @@ public class GoodServiceImpl implements GoodService {
 	}
 
 	/**
+	 * @param request 
 	 * @Title: findAll
 	 * @Description: 
 	 * @return
 	 * @return List<Goods>
 	 */  
 	@Override
-	public List<Goods> findAll() {
-		return goodMapper.findAll();
+	public List<Goods> findAll(BuilderPage<Map<String, Object>> request) {
+		return goodMapper.findAll(request.getRequestData());
 	}
 
 	/**
