@@ -3,12 +3,16 @@ package com.dev.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.IdGenerator;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dangdang.ddframe.rdb.sharding.keygen.KeyGenerator;
 import com.dev.entity.Goods;
 import com.dev.entity.system.BaseRequest;
 import com.dev.entity.system.Constants;
@@ -35,15 +39,18 @@ public class GoodsController {
  
     @Autowired
     private GoodServiceImpl goodService;
+    
+    @Autowired
+    private KeyGenerator keyGenerator;
  
  
-    @PostMapping("save")
-    public ResultTo<String> save(){
-        for(int i= 1 ; i <= 40 ; i ++){
+    @PostMapping("s/{start}")
+    public ResultTo<String> save(@PathVariable(value="start") int start){
+        for(int i= start ; i < start+10 ; i ++){
             Goods goods = new Goods();
             goods.setGoods_id((long) i);
-            goods.setGoods_name( "shangpin" + i);
-            goods.setGoods_type((long) (i+1));
+            goods.setGoods_name( "product_" + i);
+            goods.setGoods_type((long) (new Random().nextInt(1000)));
             goodService.save(goods);
             
         }
@@ -66,7 +73,7 @@ public class GoodsController {
     	return baseResponse;
     }
  
-    @PostMapping("delete")
+    @PostMapping("d")
     public ResultTo<String> delete(){
     	goodService.deleteAll();
         return new ResultTo<String>("success");

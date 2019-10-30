@@ -3,6 +3,7 @@ package com.dev.config;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.sql.DataSource;
@@ -10,6 +11,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 
 import com.dangdang.ddframe.rdb.sharding.api.ShardingDataSourceFactory;
 import com.dangdang.ddframe.rdb.sharding.api.rule.DataSourceRule;
@@ -42,6 +44,9 @@ public class DataSourceConfig {
  
     @Autowired
     private TableShardingAlgorithm tableShardingAlgorithm;
+    
+    @Autowired
+    private Environment environment;
  
     @Bean
     public DataSource getDataSource() throws SQLException {
@@ -49,6 +54,15 @@ public class DataSourceConfig {
     }
  
     private DataSource buildDataSource() throws SQLException {
+    	
+    	String logicTable=environment.getProperty("logic.table.name");
+    	String actualTables=environment.getProperty("actual.table.name");
+    	
+    	List<String> tableList=Arrays.asList(actualTables.split(","));
+    	
+    	String databaseShardingColumn=environment.getProperty("database.sharding.column");
+    	String tableShardingColumn=environment.getProperty("table.sharding.column");
+    	
         //分库设置
         Map<String, DataSource> dataSourceMap = new HashMap<>(2);
         //添加两个数据库database0和database1
@@ -58,8 +72,8 @@ public class DataSourceConfig {
         DataSourceRule dataSourceRule = new DataSourceRule(dataSourceMap, database0Config.getDatabaseName());
  
         //分表设置，大致思想就是将查询虚拟表Goods根据一定规则映射到真实表中去
-        TableRule orderTableRule = TableRule.builder("goods")
-                .actualTables(Arrays.asList("goods_0", "goods_1"))
+        TableRule orderTableRule = TableRule.builder(logicTable)
+                .actualTables(tableList)
                 .dataSourceRule(dataSourceRule)
                 .build();
  
@@ -67,8 +81,8 @@ public class DataSourceConfig {
         ShardingRule shardingRule = ShardingRule.builder()
                 .dataSourceRule(dataSourceRule)
                 .tableRules(Arrays.asList(orderTableRule))
-                .databaseShardingStrategy(new DatabaseShardingStrategy("goods_id", databaseShardingAlgorithm))
-                .tableShardingStrategy(new TableShardingStrategy("goods_type", tableShardingAlgorithm)).build();
+                .databaseShardingStrategy(new DatabaseShardingStrategy(databaseShardingColumn, databaseShardingAlgorithm))
+                .tableShardingStrategy(new TableShardingStrategy(tableShardingColumn, tableShardingAlgorithm)).build();
         DataSource dataSource = ShardingDataSourceFactory.createDataSource(shardingRule);
         return dataSource;
     }

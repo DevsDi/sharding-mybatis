@@ -2,11 +2,19 @@ package com.dev.config.algorithm;
 
 import com.dangdang.ddframe.rdb.sharding.api.ShardingValue;
 import com.dangdang.ddframe.rdb.sharding.api.strategy.table.SingleKeyTableShardingAlgorithm;
+import com.dev.util.StringUtil;
 import com.google.common.collect.Range;
+
+import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
- 
+
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.List;
  
 /**
  * 这里使用的都是单键分片策略
@@ -17,12 +25,16 @@ import java.util.LinkedHashSet;
  * @Date: 2019年10月23日 下午2:51:14
  */
 @Component
+@Slf4j
 public class TableShardingAlgorithm implements SingleKeyTableShardingAlgorithm<Long> {
- 
+	
     @Override
     public String doEqualSharding(final Collection<String> tableNames, final ShardingValue<Long> shardingValue) {
+    	
+    	String value=StringUtil.getNotNullStr(shardingValue.getValue() % 2);
+    	
         for (String each : tableNames) {
-            if (each.endsWith(shardingValue.getValue() % 2 + "")) {
+            if (each.endsWith(value)) {
                 return each;
             }
         }

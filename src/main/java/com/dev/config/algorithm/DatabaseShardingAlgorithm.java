@@ -33,12 +33,8 @@ public class DatabaseShardingAlgorithm implements SingleKeyDatabaseShardingAlgor
  
     @Override
     public String doEqualSharding(Collection<String> availableTargetNames, ShardingValue<Long> shardingValue) {
-    	log.info("=======doEqualSharding===========");
-    	log.info("======availableTargetNames======="+availableTargetNames);
-    	log.info("======shardingValue======="+shardingValue);
-    	log.info("------------------------------------------------------------------------------------");
         Long value = shardingValue.getValue();
-        if (value <= 20L) {
+        if (value % 2==0) {
             return database0Config.getDatabaseName();
         } else {
             return database1Config.getDatabaseName();
